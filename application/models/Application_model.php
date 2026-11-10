@@ -284,6 +284,19 @@ class Application_model extends CI_Model
         return $image_url;
     }
 
+    public function getBranchBanner($id = '', $type = 'banner')
+    {
+        if (!empty($id)) {
+            foreach (array('png', 'jpg', 'jpeg') as $extension) {
+                $file_path = 'uploads/app_image/' . $type . '-' . $id . '.' . $extension;
+                if (file_exists($file_path)) {
+                    return base_url($file_path);
+                }
+            }
+        }
+        return base_url('uploads/app_image/defualt.png');
+    }
+
     public function checkArrayDBVal($data, $table)
     {
         if (!empty($data)) {

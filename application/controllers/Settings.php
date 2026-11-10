@@ -77,19 +77,49 @@ class Settings extends Admin_Controller
         }
 
         if ($this->input->post('submit') == 'logo') {
-            move_uploaded_file($_FILES['logo_file']['tmp_name'], 'uploads/app_image/logo.png');
-            move_uploaded_file($_FILES['text_logo']['tmp_name'], 'uploads/app_image/logo-small.png');
-            move_uploaded_file($_FILES['print_file']['tmp_name'], 'uploads/app_image/printing-logo.png');
-            move_uploaded_file($_FILES['report_card']['tmp_name'], 'uploads/app_image/report-card-logo.png');
+            $uploadPaths = array(
+                'logo_file' => 'uploads/app_image/logo.png',
+                'text_logo' => 'uploads/app_image/logo-small.png',
+                'print_file' => 'uploads/app_image/printing-logo.png',
+                'report_card' => 'uploads/app_image/report-card-logo.png',
+                'slider_1' => 'uploads/login_image/slider_1.jpg',
+                'slider_2' => 'uploads/login_image/slider_2.jpg',
+                'slider_3' => 'uploads/login_image/slider_3.jpg',
+                'sidebox_1' => 'assets/login_page/image/sidebox.jpg',
+                'profile_bg' => 'assets/images/profile_bg.jpg',
+            );
+            $uploadFailed = false;
+            $uploadedAny = false;
+            foreach ($uploadPaths as $field => $destination) {
+                if (!isset($_FILES[$field])) {
+                    continue;
+                }
+                $file = $_FILES[$field];
+                if (!isset($file['error'])) {
+                    $uploadFailed = true;
+                    continue;
+                }
+                if ($file['error'] === UPLOAD_ERR_NO_FILE) {
+                    continue;
+                }
+                if ($file['error'] !== UPLOAD_ERR_OK || empty($file['tmp_name'])) {
+                    $uploadFailed = true;
+                    continue;
+                }
+                if (!move_uploaded_file($file['tmp_name'], FCPATH . $destination)) {
+                    $uploadFailed = true;
+                    continue;
+                }
+                $uploadedAny = true;
+            }
 
-            move_uploaded_file($_FILES['slider_1']['tmp_name'], 'uploads/login_image/slider_1.jpg');
-            move_uploaded_file($_FILES['slider_2']['tmp_name'], 'uploads/login_image/slider_2.jpg');
-            move_uploaded_file($_FILES['slider_3']['tmp_name'], 'uploads/login_image/slider_3.jpg');
-
-            move_uploaded_file($_FILES['sidebox_1']['tmp_name'], 'assets/login_page/image/sidebox.jpg');
-            move_uploaded_file($_FILES['profile_bg']['tmp_name'], 'assets/images/profile_bg.jpg');
-
-            set_alert('success', translate('the_configuration_has_been_updated'));
+            if ($uploadFailed) {
+                set_alert('error', 'One or more images could not be uploaded.');
+            } elseif (!$uploadedAny) {
+                set_alert('error', 'Please select at least one image to upload.');
+            } else {
+                set_alert('success', translate('the_configuration_has_been_updated'));
+            }
             $this->session->set_flashdata('active', 3);
             redirect(current_url());
         }

@@ -36,6 +36,9 @@ class Branch extends Admin_Controller
                     $response = $this->branch_model->save($post);
                     if ($response) {
                         set_alert('success', translate('information_has_been_saved_successfully'));
+                    } elseif (!empty($_FILES['banner_file']['name'])) {
+                        $upload_error = $this->upload->display_errors('', '');
+                        set_alert('error', $upload_error ?: 'The banner could not be uploaded.');
                     }
                     redirect(base_url('branch'));
                 } else {
@@ -76,6 +79,9 @@ class Branch extends Admin_Controller
                     $response = $this->branch_model->save($post, $id);
                     if ($response) {
                         set_alert('success', translate('information_has_been_updated_successfully'));
+                    } elseif (!empty($_FILES['banner_file']['name'])) {
+                        $upload_error = $this->upload->display_errors('', '');
+                        set_alert('error', $upload_error ?: 'The banner could not be uploaded.');
                     }
                     redirect(base_url('branch'));
                 }

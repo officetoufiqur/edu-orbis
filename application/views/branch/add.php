@@ -146,6 +146,12 @@
 							<input type="file" name="report_card" class="dropify" data-allowed-file-extensions="png" data-default-file="<?=$this->application_model->getBranchImage('', 'report-card-logo')?>" />
 						</div>
 					</div>
+					<div class="form-group">
+						<div class="col-md-offset-3 col-md-3 mb-md">
+							<label class="control-label pt-none"><?=translate('banner_photo');?></label>
+							<input type="file" name="banner_file" class="dropify" data-allowed-file-extensions="jpg png jpeg" data-default-file="<?=$this->application_model->getBranchBanner('', 'banner')?>" />
+						</div>
+					</div>
 					<footer class="panel-footer mt-lg">
 						<div class="row">
 							<div class="col-md-2 col-md-offset-3">

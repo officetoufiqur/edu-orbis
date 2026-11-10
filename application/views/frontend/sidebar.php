@@ -1,4 +1,4 @@
-<div class="panel mailbox">
+<div class="panel">
 	<div class="panel-body">
 		<ul class="nav nav-pills nav-stacked">
 			<?php

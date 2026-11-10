@@ -752,7 +752,7 @@ class Student extends Admin_Controller
     }
 
     /* validate here, if the check multi admission  email and roll */
-    public function csvCheckExistsData($student_username = '', $roll = '', $registerno = '', $class_id = '', $section_id = '', $branchID = '', $unique_roll)
+    public function csvCheckExistsData($unique_roll, $student_username = '', $roll = '', $registerno = '', $class_id = '', $section_id = '', $branchID = '')
     {
         $array = array();
         if (!empty($roll)) {

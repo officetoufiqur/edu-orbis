@@ -61,6 +61,24 @@ class Branch_model extends MY_Model
             $file_upload = true;
         }
 
+        $banner_upload_failed = false;
+        if (isset($_FILES["banner_file"]) && !empty($_FILES['banner_file']['name'])) {
+            $config['upload_path'] = './uploads/app_image/';
+            $config['allowed_types'] = 'jpg|png|jpeg';
+            $config['file_name'] = 'banner-' . $id;
+            $config['overwrite'] = true;
+            $this->upload->initialize($config);
+            if ($this->upload->do_upload('banner_file')) {
+                $file_upload = true;
+            } else {
+                $banner_upload_failed = true;
+            }
+        }
+
+        if ($banner_upload_failed) {
+            return false;
+        }
+
         if ($this->db->affected_rows() > 0 || $file_upload == true) {
             return true;
         } else {

@@ -6,8 +6,11 @@
 					
 					
         <header class="elitesDesign_banner">
-											            <div class="banner">
-                <a href="/"><img src="<?php echo base_url('uploads/frontend/images/' . $cms_setting['main_logo']); ?>" alt=""></a>
+											            <div class="banner"><a href="<?php echo base_url('dashboard');?>" class="logo">
+			<img src="<?=$this->application_model->getBranchBanner($cms_setting['branch_id'], 'banner')?>" alt="<?=translate('banner')?>">
+		</a>
+
+                <!-- <a href="/"><img src="<?php echo base_url('uploads/frontend/images/' . $cms_setting['main_logo']); ?>" alt=""></a> -->
             </div>   
 			
         </header>
