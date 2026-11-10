@@ -1,12 +1,21 @@
+<div class="logo-env">
+		<a href="<?php echo base_url('dashboard');?>" class="logo">
+			<img src="<?=$this->application_model->getBranchImage(get_loggedin_branch_id(), 'logo')?>" height="45">
+		</a>
+
+		<div class="visible-xs toggle-sidebar-left" data-toggle-class="sidebar-left-opened" data-target="html" data-fire-event="sidebar-left-opened">
+			<i class="fa fa-bars" aria-label="Toggle sidebar"></i>
+		</div>
+	</div>
 <aside id="sidebar-left" class="sidebar-left">
-	<div class="sidebar-header">
+	<!-- <div class="sidebar-header">
 		<div class="sidebar-title">
 			Main
 		</div>
-	</div>
+	</div> -->
 
-	<div class="nano">
-        <div class="nano-content">
+	<div class="sidebar-scroll">
+        <div class="sidebar-scroll-content">
             <nav id="menu" class="nav-main" role="navigation">
                 <ul class="nav nav-main">
 <?php if (is_student_loggedin()) {
@@ -29,13 +38,11 @@
                                     <i class="fab fa-slideshare"></i><span><?=translate('my_children')?></span>
                                 </a>
                             </li>
-                            <?php if (!empty(get_activeChildren_id())): ?>
-                                <li class="<?php if ($sub_page == 'userrole/dashboard') echo 'nav-active'; ?>">
-                                    <a href="<?=base_url('dashboard'); ?>">
-                                        <i class="fas fa-tachometer-alt"></i><span><?=translate('dashboard')?></span>
-                                    </a>
-                                </li>
-                            <?php endif; ?>
+                            <li class="<?php if ($sub_page == 'userrole/dashboard' && !empty(get_activeChildren_id())) echo 'nav-active'; ?>">
+                                <a href="<?=base_url('dashboard'); ?>">
+                                    <i class="fas fa-tachometer-alt"></i><span><?=translate('dashboard')?></span>
+                                </a>
+                            </li>
                         </ul>
                     </li>
 <?php } if (is_student_loggedin()) { ?>
@@ -47,7 +54,7 @@
                     </li>
 <?php
 }
-if ((is_parent_loggedin() && !empty(get_activeChildren_id())) || is_student_loggedin()) {
+if (is_parent_loggedin() || is_student_loggedin()) {
     ?>
                     <!-- teachers -->
                     <li class="<?php if ($main_menu == 'teachers') echo 'nav-active'; ?>">
@@ -223,8 +230,10 @@ if ($getAttendanceType == 2 || $getAttendanceType == 0) { ?>
 			if (typeof localStorage !== 'undefined') {
 				if (localStorage.getItem('sidebar-left-position') !== null) {
 					var initialPosition = localStorage.getItem('sidebar-left-position'),
-						sidebarLeft = document.querySelector('#sidebar-left .nano-content');
-					sidebarLeft.scrollTop = initialPosition;
+						sidebarLeft = document.querySelector('#sidebar-left .sidebar-scroll');
+					if (sidebarLeft) {
+						sidebarLeft.scrollTop = initialPosition;
+					}
 				}
 			}
 		</script>

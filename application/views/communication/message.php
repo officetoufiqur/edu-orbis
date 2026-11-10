@@ -1,7 +1,7 @@
 <?php $active = html_escape($this->input->get('type'));?>
 <div class="row">
 	<div class="col-md-3">
-		<div class="panel mailbox">
+		<div class="panel">
 			<div class="panel-heading">
 				<h3 class="panel-title">Mailbox Folder</h3>
 			</div>

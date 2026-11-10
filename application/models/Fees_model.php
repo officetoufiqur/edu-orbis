@@ -76,24 +76,60 @@ class Fees_model extends MY_Model
         return $this->db->query($sql)->result_array();
     }
 
+    
     public function getInvoiceStatus($enrollID = '')
     {
         $status = "";
-        $sql = "SELECT SUM(`fee_groups_details`.`amount` + `fee_allocation`.`prev_due`) as `total`, min(`fee_allocation`.`id`) as `inv_no` FROM `fee_allocation` LEFT JOIN `fee_groups_details` ON `fee_groups_details`.`fee_groups_id` = `fee_allocation`.`group_id` LEFT JOIN `fees_type` ON `fees_type`.`id` = `fee_groups_details`.`fee_type_id` WHERE `fee_allocation`.`student_id` = " . $this->db->escape($enrollID) . " AND `fee_allocation`.`session_id` = " . $this->db->escape(get_session_id());
-        $balance = $this->db->query($sql)->row_array();
-        $invNo = str_pad($balance['inv_no'], 4, '0', STR_PAD_LEFT);
 
-        $sql = "SELECT IFNULL(SUM(`fee_payment_history`.`amount`), 0) as `amount`, IFNULL(SUM(`fee_payment_history`.`discount`), 0) as `discount`, IFNULL(SUM(`fee_payment_history`.`fine`), 0) as `fine` FROM `fee_payment_history` LEFT JOIN `fee_allocation` ON `fee_payment_history`.`allocation_id` = `fee_allocation`.`id` WHERE `fee_allocation`.`student_id` = " . $this->db->escape($enrollID) . " AND `fee_allocation`.`session_id` = " . $this->db->escape(get_session_id());
+        $sql = "SELECT
+                    COALESCE(SUM(
+                        `fee_groups_details`.`amount` +
+                        COALESCE(`fee_allocation`.`prev_due`, 0)
+                    ), 0) AS `total`,
+                    MIN(`fee_allocation`.`id`) AS `inv_no`
+                FROM `fee_allocation`
+                LEFT JOIN `fee_groups_details`
+                    ON `fee_groups_details`.`fee_groups_id` = `fee_allocation`.`group_id`
+                LEFT JOIN `fees_type`
+                    ON `fees_type`.`id` = `fee_groups_details`.`fee_type_id`
+                WHERE `fee_allocation`.`student_id` = " . $this->db->escape($enrollID) . "
+                AND `fee_allocation`.`session_id` = " . $this->db->escape(get_session_id());
+
+        $balance = $this->db->query($sql)->row_array();
+
+        // Handle NULL invoice number
+        $invNo = !empty($balance['inv_no'])
+            ? str_pad((string)$balance['inv_no'], 4, '0', STR_PAD_LEFT)
+            : '';
+
+        $sql = "SELECT
+                    IFNULL(SUM(`fee_payment_history`.`amount`), 0) AS `amount`,
+                    IFNULL(SUM(`fee_payment_history`.`discount`), 0) AS `discount`,
+                    IFNULL(SUM(`fee_payment_history`.`fine`), 0) AS `fine`
+                FROM `fee_payment_history`
+                LEFT JOIN `fee_allocation`
+                    ON `fee_payment_history`.`allocation_id` = `fee_allocation`.`id`
+                WHERE `fee_allocation`.`student_id` = " . $this->db->escape($enrollID) . "
+                AND `fee_allocation`.`session_id` = " . $this->db->escape(get_session_id());
+
         $paid = $this->db->query($sql)->row_array();
 
-        if ($paid['amount'] == 0) {
+        $total = (float)($balance['total'] ?? 0);
+        $amount = (float)($paid['amount'] ?? 0);
+        $discount = (float)($paid['discount'] ?? 0);
+
+        if ($amount == 0) {
             $status = 'unpaid';
-        } elseif ($balance['total'] == ($paid['amount'] + $paid['discount'])) {
+        } elseif ($total == ($amount + $discount)) {
             $status = 'total';
-        } elseif ($paid['amount'] > 1) {
+        } elseif ($amount > 1) {
             $status = 'partly';
         }
-        return array('status' => $status, 'invoice_no' => $invNo);
+
+        return array(
+            'status' => $status,
+            'invoice_no' => $invNo
+        );
     }
 
     public function getInvoiceDetails($enrollID = '')
