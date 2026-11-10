@@ -116,7 +116,7 @@ html.dark .header .menu-icon-grid > a:hover {
 /* Layout Base - Content Body */
 .content-body {
 	display: table-cell;
-	padding: 18px;
+	padding: 0 25px;
 	position: relative;
 	vertical-align: top;
 }
@@ -13501,7 +13501,8 @@ a:focus {
 	}
 
 	html.sidebar-left-collapsed .sidebar-left .sidebar-scroll:hover {
-		width: 230px;
+		width: 320px;
+		background: inherit;
 	}
 
 	html.sidebar-left-collapsed .sidebar-left .sidebar-scroll:hover .nav-main .nav-expanded > ul.nav-children {

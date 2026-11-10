@@ -29,9 +29,28 @@
 			?>
 			<!-- page main content -->
 			<section role="main" class="content-body">
+				<div>
+					<nav class="page-header-breadcrumbs" aria-label="Breadcrumb">
+						<a href="<?php echo base_url('dashboard');?>"><i class="fas fa-home" aria-hidden="true"></i><?php echo translate('dashboard');?></a>
+						<i class="fas fa-chevron-right page-header-breadcrumb-separator" aria-hidden="true"></i>
+						<span class="page-header-current"><?php echo $title;?></span>
+					</nav>
+				</div>
 				<!-- <header class="page-header">
-					<a class="page-title-icon" href="<?php echo base_url('dashboard');?>"><i class="fas fa-home"></i></a>
-					<h2><?php echo $title;?></h2>
+					<div class="page-header-main">
+						<a class="page-title-icon" href="<?php echo base_url('dashboard');?>" aria-label="Dashboard"><i class="fas fa-home" aria-hidden="true"></i></a>
+						<div class="page-header-copy">
+							<h2 class="page-header-current"><?php echo $title;?></h2>
+							<?php if (!empty($header_subtitle)): ?>
+								<p class="page-header-subtitle"><?php echo $header_subtitle;?></p>
+							<?php endif; ?>
+						</div>
+					</div>
+					<nav class="page-header-breadcrumbs" aria-label="Breadcrumb">
+						<a href="<?php echo base_url('dashboard');?>"><i class="fas fa-home" aria-hidden="true"></i><?php echo translate('dashboard');?></a>
+						<i class="fas fa-chevron-right page-header-breadcrumb-separator" aria-hidden="true"></i>
+						<span class="page-header-current"><?php echo $title;?></span>
+					</nav>
 				</header> -->
 				<?php $this->load->view($sub_page); ?>
 			</section>

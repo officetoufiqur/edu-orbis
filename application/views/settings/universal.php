@@ -15,12 +15,12 @@
 				</a>
 			
 			</li>
-			<li <?=($this->session->flashdata('active') == 3 ? 'class="active"' : '');?>>
+			<!-- <li <?=($this->session->flashdata('active') == 3 ? 'class="active"' : '');?>>
 				<a href="#upload" data-toggle="tab">
 				   <i class="fab fa-uikit"></i>
 				   <span class="hidden-xs"> <?=translate('logo')?></span>
 				</a>
-			</li>
+			</li> -->
 			<li <?=($this->session->flashdata('active') == 4 ? 'class="active"' : '');?>>
 				<a href="#file_settings" data-toggle="tab">
 				   <i class="far fa-file-alt"></i>

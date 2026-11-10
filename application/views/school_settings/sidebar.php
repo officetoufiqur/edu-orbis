@@ -4,7 +4,7 @@ if ($this->input->get('branch_id')) {
    $url = '?branch_id=' . $this->input->get('branch_id', true);
 }
 ?>
-<div class="panel mailbox">
+<div class="panel">
     <div class="panel-body">
         <ul class="nav nav-pills nav-stacked">
         <?php if(get_permission('school_settings', 'is_view')){ ?>
